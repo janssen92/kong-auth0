@@ -17,7 +17,7 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v2
     - name: Install Dependencies
-      run: sudo apt-get install curl unzip libreadline-dev libncurses-dev libssl-dev python python-pip
+      run: sudo apt-get install curl unzip build-essential libreadline-dev libncurses-dev libssl-dev python python-pip
     - name: Set up Python 3.6.10
       uses: actions/setup-python@v1
       with:
