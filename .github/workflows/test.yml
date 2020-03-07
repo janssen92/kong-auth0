@@ -24,12 +24,13 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
+    - name: Install Dependencies
+      run: sudo apt-get install curl unzip libreadline-dev libssl-dev python python-pip
     - name: Set up Python 3.6.10
       uses: actions/setup-python@v1
       with:
         python-version: 3.6.10
+    - name: Setup Luarocks
+      run: bash ci/setup.sh
     - name: Run Tests
-      run: |
-        sudo -E bash ci/root.sh
-        . ci/setup.sh
-        . ci/run.sh
+      run: bash ci/run.sh
