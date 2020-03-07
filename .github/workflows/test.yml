@@ -10,14 +10,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      LUA_VERSION: 5.1 
-      KONG_VERSION: 0.13.0-0
-      LUA_RESTY_OPENIDC_VERSION: 1.6.1-1
+      LUA_VERSION: 5.3.4
+      KONG_VERSION: 1.5.0
+      LUA_RESTY_OPENIDC_VERSION: 1.7.2
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
     - name: Install Dependencies
-      run: sudo apt-get install curl unzip build-essential libreadline-dev libncurses-dev libssl-dev python python-pip
+      run: sudo apt-get install build-essential libreadline-dev
     - name: Set up Python 3.6.10
       uses: actions/setup-python@v1
       with:
