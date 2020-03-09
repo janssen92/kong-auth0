@@ -1,7 +1,7 @@
-local utils = require("kong.plugins.oidc.utils")
+local utils = require("kong.plugins.auth0.utils")
 local lu = require("luaunit")
 
-TestToken = require("test.unit.mockable_case"):extend()
+TestToken = require("tests.mockable_case"):extend()
 
 function TestToken:setUp()
   TestToken.super:setUp()

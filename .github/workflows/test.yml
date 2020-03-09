@@ -7,36 +7,38 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+    container: 
+      image: kong:1.5.1-ubuntu
     env:
       LUA_VERSION: 5.3.4
       KONG_VERSION: 1.5.0
       LUA_RESTY_OPENIDC_VERSION: 1.7.2
+      LUA_ROCKS_VERSION: 3.3.1
+      OPENRESTY_VERSION: 1.15.8.2
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
-    - name: Install Dependencies
-      # run: sudo apt-get install build-essential libreadline-dev
+    - name: Copy Kong Auth0 Plugin
       run: |
-        sudo --no-install-recommends wget gnupg ca-certificates software-properties-common
-        wget -O - https://openresty.org/package/pubkey.gpg | sudo apt-key add -
-        sudo add-apt-repository -y "deb http://openresty.org/package/ubuntu $(lsb_release -sc) main"
-        sudo apt-get -y install openresty nginx
-    - name: Set up Python 3.6.10
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.6.10
-    - name: Setup Luarocks and kong
+        cp -r ./kong /usr/local/kong-auth0
+        export LUA_PATH="/usr/local/share/lua/5.1/?.lua;/usr/local/kong-auth0/?.lua"
+        export LUA_CPATH="/usr/local/lib/lua/5.1/?.so"
+    - name: APT Install
       run: |
-        pip install hererocks
-        hererocks lua_install -rlatest --lua=${LUA_VERSION}
-        export PATH=${PATH}:${PWD}/lua_install/bin
-
-        luarocks install kong ${KONG_VERSION}
+        apt-get update
+        apt-get install -y unzip gcc lua5.1
+    - name: Install Kong Dependencies
+      run: |
+        lua -v
         luarocks install lua-resty-openidc ${LUA_RESTY_OPENIDC_VERSION}
         luarocks install lua-cjson
         luarocks install luaunit
         luarocks install luacov
+        luarocks install luacov-coveralls
     - name: Run Tests
-      run: bash ci/run.sh
+      run: bash tests/run.sh
+    - name: Coverage
+      run: luacov-coveralls
+      

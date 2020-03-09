@@ -1,11 +1,11 @@
 local lu = require("luaunit")
 
-TestIntrospect = require("test.unit.mockable_case"):extend()
+TestIntrospect = require("tests.mockable_case"):extend()
 
 
 function TestIntrospect:setUp()
   TestIntrospect.super:setUp()
-  self.handler = require("kong.plugins.oidc.handler")()
+  self.handler = require("kong.plugins.auth0.handler")()
 end
 
 function TestIntrospect:tearDown()
