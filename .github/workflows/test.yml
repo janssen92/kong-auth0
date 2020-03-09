@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: 
+      image: kong:1.5.1-ubuntu
+    env:
+      LUA_VERSION: 5.3.4
+      KONG_VERSION: 1.5.0
+      LUA_RESTY_OPENIDC_VERSION: 1.7.2
+      LUA_ROCKS_VERSION: 3.3.1
+      OPENRESTY_VERSION: 1.15.8.2
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+    - name: Copy Kong Auth0 Plugin
+      run: |
+        cp -r ./kong /usr/local/kong-auth0
+        export LUA_PATH="/usr/local/share/lua/5.1/?.lua;/usr/local/kong-auth0/?.lua"
+        export LUA_CPATH="/usr/local/lib/lua/5.1/?.so"
+    - name: APT Install
+      run: |
+        apt-get update
+        apt-get install -y unzip gcc lua5.1
+    - name: Install Kong Dependencies
+      run: |
+        lua -v
+        luarocks install lua-resty-openidc ${LUA_RESTY_OPENIDC_VERSION}
+        luarocks install lua-cjson
+        luarocks install luaunit
+        luarocks install luacov
+        luarocks install luacov-coveralls
+    - name: Run Tests
+      run: bash tests/run.sh
+    - name: Coverage
+      run: luacov-coveralls
+      

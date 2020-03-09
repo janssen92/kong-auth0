@@ -1,4 +1,4 @@
-local BaseCase = require("test.unit.base_case")
+local BaseCase = require("tests.base_case")
 local MockableCase = BaseCase:extend()
 
 

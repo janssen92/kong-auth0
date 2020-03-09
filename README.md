@@ -75,7 +75,6 @@ You also need to set the `KONG_PLUGINS` environment variable
 | `config.discovery` | https://.well-known/openid-configuration | false | OIDC Discovery Endpoint (`/.well-known/openid-configuration`) |
 | `config.scope` | openid | false| OAuth2 Token scope. To use OIDC it has to contains the `openid` scope |
 | `config.ssl_verify` | false | false | Enable SSL verification to OIDC Provider |
-| `config.session_secret` | | false | Additional parameter, which is used to encrypt the session cookie. Needs to be random |
 | `config.introspection_endpoint` | | false | Token introspection endpoint |
 | `config.timeout` | | false | OIDC endpoint calls timeout |
 | `config.introspection_endpoint_auth_method` | client_secret_basic | false | Token introspection auth method. resty-openidc supports `client_secret_(basic|post)` |
